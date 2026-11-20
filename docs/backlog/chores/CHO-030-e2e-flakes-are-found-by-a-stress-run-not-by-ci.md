@@ -34,12 +34,12 @@ The audit is not done yet: it is the first step. At the delivery's commit, run t
 judge each hit by whether the next assertion can run before the thing it needs has
 finished (a notice taking focus, an animation ending, a menu opening):
 
-| Area              | Search or run                                                                                                                                                                                                       | How to judge a hit                                                                           |
-| ----------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------- |
-| Shared helpers    | read each export of `tests/e2e/fixtures/` that triggers a close, publish or navigation                                                                                                                              | it returns before the focus or notice its action causes has arrived                          |
-| Focus right after | `rg -n -B3 -e '\.focus\(\)' -e toBeFocused tests/e2e`                                                                                                                                                               | the line before is a click, keypress or helper that moves focus on its own                   |
-| Popups' boxes     | `rg -l animate-in src/components/ui` lists the popups that animate in (dialog, alert dialog, sheet, menus, tooltip); then `rg -n -e 'boundingBox\(' -e getBoundingClientRect tests/e2e` in each spec that opens one | the box is read by a call other than `settledBoxes`, or two boxes are read in separate calls |
-| Load              | `./node_modules/.bin/playwright test <spec> --repeat-each=20 --workers=12` per spec on an 8-core host (DEF-024's Reproduce used 40 repeats of one case); 44 specs at `843acf2`, so time it on one first             | any failure that `--workers=4` does not show                                                 |
+| Area              | Search or run                                                                                                                                                                                                                                                    | How to judge a hit                                                                           |
+| ----------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------- |
+| Shared helpers    | read each export of `tests/e2e/fixtures/` that triggers a close, publish or navigation                                                                                                                                                                           | it returns before the focus or notice its action causes has arrived                          |
+| Focus right after | `rg -n -B3 -e '\.focus\(\)' -e toBeFocused tests/e2e`                                                                                                                                                                                                            | the line before is a click, keypress or helper that moves focus on its own                   |
+| Popups' boxes     | `rg -l animate-in src/components/ui` lists the popups that animate in (dialog, alert dialog, sheet, menus, tooltip); then `rg -n -e 'boundingBox\(' -e 'boxe?s?Of\(' -e getBoundingClientRect tests/e2e` for the specs that open one, and the fixtures they call | the box is read by a call other than `settledBoxes`, or two boxes are read in separate calls |
+| Load              | `./node_modules/.bin/playwright test <spec> --repeat-each=20 --workers=12` per spec on an 8-core host (DEF-024's Reproduce used 40 repeats of one case); 44 specs at `843acf2`, so time it on one first                                                          | any failure that `--workers=4` does not show                                                 |
 
 Seen in CI so far: every finished CI run with an E2E job, 2026-11-19 18:14 to
 2026-11-20 17:09 UTC (29 runs, `gh run list --workflow ci.yml -L 60`), read from each
@@ -87,7 +87,7 @@ causes has arrived
 
 ## Out of scope
 
-DEF-024's own fix to `publishOnce`, DEF-025's to the side panel spec's helpers, the CI
+DEF-024's own fix to `publishOnce`, DEF-025's to the popups' box reads (`settledBoxes`), the CI
 runner's package mirror (CHO-029), and Vitest component tests (DEF-013, DEF-022,
 CHO-018 were their own cases).
 
