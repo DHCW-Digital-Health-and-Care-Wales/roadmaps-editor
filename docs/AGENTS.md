@@ -43,9 +43,10 @@ the next free number across the live tree, `_archive/` and open PRs' files
 - After any record change (an owner's answer, a moved obligation, a new or
   edited scenario), `grep` its IDs and terms across the epic, stories,
   analyses and glossary (a term of several words as
-  `rg -U -i 'group\s+assignment'`, since wrapped prose splits it across lines),
-  and fix every statement it makes false, including a claim that a field or
-  stored state exists without naming the record that provides it. Search the status words as well, with their inflections
+  `rg -n -U -i 'group\s+assignment' docs`, since wrapped prose splits it
+  across lines), and fix every statement it makes false, including a claim
+  that a field or stored state exists without naming the record that provides
+  it. Search the status words as well, with their inflections
   (`rg -n -i 'undecided|no selection|still open|stay(s)? open|remain(s)? open|wait(s)? for|awaiting|unselected|not selected|not yet' docs`,
   leaving `_archive/` alone; triage the hits), since a decision leaves
   "waits for" and "undecided" claims in intros and gate paragraphs. An answer
