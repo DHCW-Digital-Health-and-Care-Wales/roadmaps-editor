@@ -12,11 +12,12 @@ having the main agent inspect every site. Do small edits directly.
 | Architecture, auth/token handling, ambiguous requirements | Main agent or a stronger worker                              | Relevant domain context and trade-offs; main retains decision               |
 | Correctness review                                        | **Opus** (`code-reviewer`) **and Sol** (Codex `gpt-6.1-sol`) | Fresh pinned scope; `code-review` skill; two independent reviews            |
 | Maintainability and conventions review                    | **Sonnet**, high effort (`quality-reviewer`)                 | Fresh pinned scope; `quality-review` skill                                  |
+| Security review, on a security-relevant PR                | **Fable 5.2**, high effort (`security-reviewer`)             | Fresh pinned scope; `threat-review` skill                                   |
 
 Model names in Claude agent frontmatter are Claude-specific preferences. At
 runtime inspect the available providers and models; choose the cheapest capable
 one for ordinary work, then escalate after a concrete failure or when reasoning
-risk warrants it. The three reviewers are fixed: never substitute another model
+risk warrants it. The reviewers' models are fixed: never substitute another model
 for one silently, claim an unavailable model ran, or downshift
 security-sensitive judgement just for cost. A record's Suggested model is a
 tier hint: Haiku is economy, Sonnet standard, Opus stronger; a runtime without
@@ -64,18 +65,21 @@ guide file changes no rule, as
 goes_).
 
 For role-specific briefs, use `.claude/agents/mechanical-worker.md`,
-`.claude/agents/quality-reviewer.md` and `.claude/agents/code-reviewer.md`. The
-Sol reviewer gets the `code-reviewer` brief's body in full, since a Codex child
-does not read Claude agent files. Exploration gets a fresh read-only brief per
+`.claude/agents/quality-reviewer.md`, `.claude/agents/code-reviewer.md` and
+`.claude/agents/security-reviewer.md`. A reviewer started on another provider gets
+its brief's body in full (Sol the `code-reviewer` body; Fable, from Codex, the
+`security-reviewer` body), since a child on another provider does not read Claude
+agent files. Exploration gets a fresh read-only brief per
 the Worker contract.
 
 ## Dispatch and completion
 
 Start the reviewers of a round together so they run concurrently: a
 reviewer on your own provider through the runtime's native subagent tool with
-the model and effort set explicitly (Opus; Sonnet at high effort), and one on
-another provider (Sol; or Opus, and Sonnet at high effort, when you run on
-Codex) through a cross-provider delegation tool.
+the model and effort set explicitly (Opus; Sonnet at high effort; Fable 5.2 at
+high effort for the security lane), and one on another provider (Sol; or Opus,
+Sonnet at high effort and Fable 5.2 at high effort, when you run on Codex) through a
+cross-provider delegation tool.
 Start any background delegation first, then the foreground ones, so nothing
 waits on another.
 
@@ -135,19 +139,30 @@ pass.
 
 - **Lanes**: _correctness_, with two reviewers (Opus and Sol), each following
   `code-review`; _quality_, with one reviewer (Sonnet, high effort) following
-  `quality-review`. Each reviewer is its own track for re-checks. A docs-only
-  PR, one that changes only Markdown under `docs/` or `.agents/skills/` or an
-  `AGENTS.md`/`CLAUDE.md` (an agent definition under `.claude/agents/` or a
-  skill's script is config or code, not docs), takes the correctness lane
-  alone (Opus and Sol). Its briefs add the record sweep (`docs/AGENTS.md`)
+  `quality-review`; and, on a security-relevant PR, _security_, with one reviewer
+  (Fable 5.2, high effort) following `threat-review`. Each reviewer is its own track
+  for re-checks. A docs-only PR, one that changes only Markdown under `docs/` or
+  `.agents/skills/` or an `AGENTS.md`/`CLAUDE.md` (an agent definition under
+  `.claude/agents/` or a skill's script is config or code, not docs), takes the
+  correctness lane alone (Opus and Sol), with the security lane when it is
+  security-relevant. Its briefs add the record sweep (`docs/AGENTS.md`)
   and, for an instruction file, `.agents/skills/writing-for-agents/SKILL.md`
   and `docs/operations/authoring-agent-instructions.md`, whose recur bar and
   replace-or-sharpen rule the reviewers apply to every added line. Its cap is
   round 1 and one re-check per reviewer, with no final fresh pass.
+- **Security-relevant**: a PR that records a decision on, or implements or changes
+  code or configuration that handles, authentication (sign-in included), sessions,
+  tokens, OAuth scopes, authorisation, tenant isolation, secrets, untrusted input at a
+  trust boundary, browser hardening (origin checks, CORS, CSP, redirects), personal
+  data in logs, the identity and permissions CI or a deploy runs with, what CI runs
+  from untrusted input (triggers, action pinning), a new runtime dependency, or
+  infrastructure-held protections. A PR that only tunes CI (a timeout, a cache) is
+  not. The delivering agent judges; the PR body's
+  Review record says whether the lane ran, and why not when it did not.
 - **Round 1**: the PR's reviewers, fresh and concurrent, briefed as the
   Worker contract sets.
 - **Round 2, the re-check**: only for a reviewer whose round 1 found anything
-  above P3 (correctness) or a 🔴 or 🟡 (quality); a CI finding that arrives
+  above P3 (correctness or security) or a 🔴 or 🟡 (quality); a CI finding that arrives
   first joins it. Start a fresh reviewer on the same model and effort. Supply
   its previous findings and how each was addressed, the head last reviewed, the
   new head and the diff command between them. A rebase since the last round
@@ -161,8 +176,10 @@ pass.
 - **Final fresh pass**: when a fix changes runtime behaviour (logic, data, auth
   or UI behaviour), not only wording, docs, tests or renames, start one fresh
   reviewer over the whole diff in the lane that owns that behaviour: Sol for
-  correctness, Sonnet at high effort for quality. A fix for a CI finding counts.
-  The pass is its own task beside that lane's re-checks, briefed as a first
+  correctness, Sonnet at high effort for quality. A fix to a security control on a
+  PR whose security lane ran also gets a Fable 5.2 pass at high effort. A fix for a
+  CI finding counts.
+  The pass is its own task beside its lane's re-checks, briefed as a first
   round at the new head with the requirements and pinned SHAs, and asked to
   judge from those and the pinned diff alone, not the PR's body or comments. Its
   own findings that would trigger a re-check get one, unless the pass ran after

@@ -41,7 +41,7 @@ Trace each piece of friction to its cause, checking these categories:
   incident and a review date about 90 days out in a comment at its head.
   A slip that is not mechanical goes where the next reader of that code meets
   it: a comment at the site, or nowhere when the code already says it.
-  Change a review skill (`code-review`, `quality-review`) only to add or
+  Change a review skill (`code-review`, `quality-review`, `threat-review`) only to add or
   sharpen a general lens, a class of defect that recurs across many kinds of
   diff; one review's miss is evidence for a lens, never a check of its own.
 - **Agent guides**: would a rule have prevented the friction? Give it the

@@ -168,9 +168,9 @@ PR and explicit outstanding checks, never a claimed pass or completed story.
 ## 4. Review and open the PR
 
 Read `references/pull-requests.md`. Pin the base and head SHAs and dispatch
-**a separate reviewer with fresh context per review**, following `code-review`
-or `quality-review` in the lanes, rounds and runtimes `references/delegation.md`
-sets. Supply requirements and evidence, not
+**a separate reviewer with fresh context per review**, following `code-review`,
+`quality-review` or `threat-review` in the lanes, rounds and runtimes
+`references/delegation.md` sets. Supply requirements and evidence, not
 the implementer's self-assessment. Reviewers inspect their own relevant
 callers and rules; they do not edit or switch the shared checkout. Keep their
 reports separate. Resolve findings, fixing each at its cause and wherever it

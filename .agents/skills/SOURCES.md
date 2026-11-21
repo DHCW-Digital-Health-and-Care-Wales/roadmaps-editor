@@ -19,7 +19,7 @@ license is preserved in `mattpocock-LICENSE`.
 
 `shadcn` and `playwright-cli` come from their tools' own distributions (the
 shadcn CLI and `@playwright/cli`; revisions unrecorded). `implement-story`,
-`orchestrate`, `code-review`, `quality-review`, `copywriter` and
+`orchestrate`, `code-review`, `quality-review`, `threat-review`, `copywriter` and
 `ux-prototypes` are this repository's own.
 
 ## Local adaptations
