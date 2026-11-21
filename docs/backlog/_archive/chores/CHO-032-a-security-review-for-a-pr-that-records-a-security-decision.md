@@ -1,14 +1,13 @@
 # CHO-032: A pull request that records a security decision gets a security review, not only correctness
 
-- **Status**: Needs grilling — a retro proposal from PR #222; whether to add a review
-  lane is the owner's call
+- **Status**: Done — owner, 2026-11-21 (D1–D3); archived
 - **Type**: Chore
-- **Area**: Docs
+- **Area**: Docs + CI/CD
 - **Epic**: standalone
 - **Depends on**: none
 - **Binding ADRs**: none
 - **Suggested model**: Sonnet — an edit to one skill reference, once decided
-- **Delivered**: _(add on delivery)_
+- **Delivered**: https://github.com/DHCW-Digital-Health-and-Care-Wales/roadmaps-editor/pull/223
 
 ## Summary
 
@@ -51,33 +50,52 @@ weighing.
 
 ## Acceptance criteria
 
-_Written after grilling._
+### S1: A security review skill exists, invoked beside correctness and quality
 
-## Open questions _(while Needs grilling; delete once answered)_
+- [x] `.agents/skills/threat-review/SKILL.md` reviews a diff, code or design record,
+      for threats, trust boundaries and security claims, under its own verdict, and
+      `.claude/agents/security-reviewer.md` runs it on Fable 5.2 at high effort.
 
-- **Q1**: Does a docs-only PR that records a security decision get a security review
-  lane? Example: the infrastructure epic's ADR on Cloud Run ingress is raised; today
-  only Opus and Sol review it, for requirement fidelity.
-  - (a) Yes, one security reviewer beside correctness, by default (recommended) —
-    `delegation.md` _Review rounds_ gains the lane and a brief; one more reviewer per
-    such PR, with its re-check.
-  - (b) Only when the owner asks, as on PR #222 — no change; the lane depends on the
-    owner remembering.
-  - (c) No: widen the correctness brief with a threat lens — no new reviewer; the
-    briefs grow, and PR #222 suggests the lenses compete for attention.
-- **Q2**: Which model runs it? Example: the security reviewer on the ingress ADR is
-  Fable, while Opus and Sol review correctness.
-  - (a) A different model family from the correctness pair (recommended) — PR #222
-    changed both model and brief, so it cannot separate them; a different family keeps
-    both levers; one more provider to have available.
-  - (b) Opus — no new provider; overlaps the Opus correctness reviewer's blind spots.
-- **Q3**: Which PRs count as recording a security decision? Example: the story that
-  builds ADR-018's sign-in, a code PR, raised after its ADR was reviewed.
-  - (a) A PR that records or implements a decision on authentication, sessions,
-    tokens, authorisation, tenancy isolation or infrastructure-held protections
-    (recommended) — a list in the brief, judged by the delivering agent.
-  - (b) Only a docs PR that records one — fewer reviews; the code that implements
-    ADR-018 gets the correctness lane's auth lens alone.
-  - (c) Any ADR — simpler to judge; more reviews of ADRs with no security content.
+### S2: A security-relevant PR takes the security lane
+
+- [x] `.agents/skills/implement-story/references/delegation.md` sets the security lane
+      (Fable 5.2, high effort, `threat-review`) for a PR that records or implements a
+      security decision, docs-only included, concurrent with the other lanes, with the
+      same re-check and final-pass rules.
+
+### S3: The Review record says whether the lane ran
+
+- [x] `.github/pull_request_template.md`'s Review record names the security reviewer,
+      or why it did not run.
 
 ## Decisions
+
+- **D1** (owner, 2026-11-21, on PR #222): a new skill for security-specific reviews,
+  invoked in parallel with the quality and correctness reviews (Q1 (a), as a skill of
+  its own).
+- **D2** (owner, 2026-11-21): it runs on Fable 5.2 at high effort (Q2 (a)).
+- **D3** (owner, 2026-11-21): it runs on security-relevant PRs, code or docs, judged by
+  the delivering agent against a list (Q3 (a)).
+- **D4** (agent, 2026-11-21): named `threat-review`, since the runtime already offers a
+  built-in `security-review`.
+
+## Delivery
+
+### Departures
+
+- The lane's cost was not measured before the owner decided (Measurement): the owner
+  chose on PR #222's evidence. The first security-relevant PRs' Review records show
+  its cost.
+
+### Contract for dependents
+
+- A delivering agent judges each PR against the list in `delegation.md` _Review
+  rounds_ and records in the Review record whether the security lane ran.
+
+### Scenario evidence
+
+| Scenario | Held by                                                                                                            |
+| -------- | ------------------------------------------------------------------------------------------------------------------ |
+| S1       | `.agents/skills/threat-review/SKILL.md`, `.claude/agents/security-reviewer.md`; the skill is listed by the runtime |
+| S2       | `.agents/skills/implement-story/references/delegation.md` (_Review rounds_, the table)                             |
+| S3       | `.github/pull_request_template.md` (_Review record_)                                                               |

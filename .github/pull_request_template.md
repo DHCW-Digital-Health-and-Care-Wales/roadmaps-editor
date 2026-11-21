@@ -105,7 +105,8 @@ exception to a rule, with its reason.
 ### Review record
 
 <!--
-Per reviewer (correctness: Opus and Sol; quality: Sonnet): rounds and pinned
+Per reviewer (correctness: Opus and Sol; quality: Sonnet; security: Fable, on a
+security-relevant PR, or why it did not run): rounds and pinned
 heads; each finding with its fix, or its decline and reason; the fixes after
 the review cap; whether the final fresh pass ran, and why.
 -->
