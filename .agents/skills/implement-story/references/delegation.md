@@ -150,12 +150,14 @@ pass.
   and `docs/operations/authoring-agent-instructions.md`, whose recur bar and
   replace-or-sharpen rule the reviewers apply to every added line. Its cap is
   round 1 and one re-check per reviewer, with no final fresh pass.
-- **Security-relevant**: a PR that records, implements or changes code or
-  configuration handling authentication (sign-in included), sessions, tokens, OAuth
-  scopes, authorisation, tenant isolation, secrets, untrusted input at a trust
-  boundary, personal data in logs, the identity and permissions CI or a deploy runs
-  with, a new runtime dependency, or infrastructure-held protections. A PR that only
-  tunes CI (a timeout, a cache) is not. The delivering agent judges; the PR body's
+- **Security-relevant**: a PR that records a decision on, or implements or changes
+  code or configuration that handles, authentication (sign-in included), sessions,
+  tokens, OAuth scopes, authorisation, tenant isolation, secrets, untrusted input at a
+  trust boundary, browser hardening (origin checks, CORS, CSP, redirects), personal
+  data in logs, the identity and permissions CI or a deploy runs with, what CI runs
+  from untrusted input (triggers, action pinning), a new runtime dependency, or
+  infrastructure-held protections. A PR that only tunes CI (a timeout, a cache) is
+  not. The delivering agent judges; the PR body's
   Review record says whether the lane ran, and why not when it did not.
 - **Round 1**: the PR's reviewers, fresh and concurrent, briefed as the
   Worker contract sets.
@@ -177,7 +179,7 @@ pass.
   correctness, Sonnet at high effort for quality. A fix to a security control on a
   PR whose security lane ran also gets a Fable 5.2 pass at high effort. A fix for a
   CI finding counts.
-  The pass is its own task beside that lane's re-checks, briefed as a first
+  The pass is its own task beside its lane's re-checks, briefed as a first
   round at the new head with the requirements and pinned SHAs, and asked to
   judge from those and the pinned diff alone, not the PR's body or comments. Its
   own findings that would trigger a re-check get one, unless the pass ran after

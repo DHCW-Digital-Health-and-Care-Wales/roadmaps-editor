@@ -76,7 +76,9 @@ weighing.
   owner's request or widening the correctness brief.
 - **D2** (owner, 2026-11-21): it runs on Fable 5.2 at high effort, a different model
   family from the correctness pair.
-- **D3** (owner, 2026-11-21): it runs on security-relevant PRs, code or docs, those
+- **D3** (owner, 2026-11-21, choosing the option that named this list when asked which
+  PRs get the lane): it runs on
+  security-relevant PRs, code or docs, those
   handling authentication, sessions, tokens, OAuth scopes, authorisation, tenant
   isolation, secrets, CI or deploy identity, or infrastructure-held protections, judged
   by the delivering agent; over every PR, or only when asked.
@@ -91,7 +93,8 @@ weighing.
   chose on PR #222's evidence.
 - The security-relevant list in `delegation.md` widens D3's to code or configuration
   that handles those concerns, untrusted input at a trust boundary, personal data in
-  logs and a new runtime dependency (agent, from review), so a PR carrying no new
+  logs, browser hardening, what CI runs from untrusted input and a new runtime
+  dependency (agent, from review; for the owner's agreement), so a PR carrying no new
   decision but touching a protected asset still takes the lane.
 
 ### Scenario evidence

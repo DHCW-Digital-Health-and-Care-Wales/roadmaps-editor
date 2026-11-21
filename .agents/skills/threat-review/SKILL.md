@@ -36,11 +36,12 @@ probe a real service, account or secret.
      database (row-level security, definer functions), the public read, CI and the
      cloud, the edge and the service.
 3. **Read the binding security decisions** the change reaches, from `docs/adr/` (index
-   in its `README.md`): today's Sheets token (ADR-003), the database's isolation and
+   in its `README.md`): today's Sheets token (ADR-003), the deployment's supply chain
+   (ADR-007), the database's isolation and
    history (ADR-015), the repository's ruleset (ADR-016), the API stack (ADR-017), sign-in
    and sessions (ADR-018), authorisation (ADR-019), origins and HTTP hardening
-   (ADR-020), with the infrastructure epic ADR-020 names; the root `AGENTS.md` rules on
-   tokens and untrusted data. An ADR's accepted risks, and the exceptions it states (a
+   (ADR-020), with infrastructure-held protections in EPC-023; the root `AGENTS.md` rules on
+   tokens and untrusted data. An accepted ADR's risks, and the exceptions it states (a
    value it lets travel in a URL, a request it exempts from a rule), are the owner's:
    not findings unless the change widens them.
 4. **Apply the lenses**: every general lens, then each area lens the change reaches.
@@ -91,18 +92,18 @@ Each names a class of defect; the ADR holds the rule it is judged against.
   function with more rights than its job; a privileged action without a recorded
   principal.
 - **The browser and OAuth scopes** (ADR-020, ADR-003): a write accepted cross-site
-  outside the exceptions an ADR states; credentialed CORS; HTML built from untrusted
+  outside the exceptions an accepted ADR states; credentialed CORS; HTML built from untrusted
   text; a redirect to an address off the allow-list; a scope wider than the feature
   needs, or used without checking it was granted; while the Sheets adapter lives, its
   token outside memory.
 - **Untrusted input**: data not parsed at the boundary (Zod in the editor, Pydantic in
   the API); SQL built from strings; sizes and counts unbounded; patterns open to
   catastrophic backtracking.
-- **CI and supply chain** (ADR-016): a workflow that runs untrusted code with secrets or
+- **CI and supply chain** (ADR-007 _Supply chain_, ADR-016): a workflow that runs untrusted code with secrets or
   write permissions; an action not pinned by SHA; cloud identity not conditioned on
   repository, ref and environment; a new dependency unmaintained, unproven or just
   released.
-- **Infrastructure** (ADR-020 and the epic it names): a grant wider than its job; a
+- **Infrastructure** (ADR-020, EPC-023): a grant wider than its job; a
   long-lived key; a database reachable from outside; an action no log attributes, or
   a log readable by more people than need it; real data outside production.
 - **A design record** (an ADR, epic, analysis or story that records a security
