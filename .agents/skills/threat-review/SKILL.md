@@ -1,10 +1,8 @@
 ---
 name: threat-review
 description: >-
-  Security review of a diff, branch or PR, code or design record: threats, trust
-  boundaries, sign-in, sessions, tokens, authorisation, tenant isolation, untrusted
-  input, secrets, CI and infrastructure-held protections. Use beside code-review and
-  quality-review on a security-relevant PR; correctness belongs to code-review.
+  Security review of a diff, branch or PR, code or a design record, from the attacker's
+  side. Use beside code-review and quality-review on a security-relevant PR.
 user-invocable: true
 ---
 
@@ -14,8 +12,7 @@ Judge whether the change keeps every asset safe from every actor who can reach i
 and whether each security claim it makes is true. `code-review` owns requirements and
 regressions, `quality-review` maintainability; this review owns the attacker's view,
 under its own verdict. It runs as the security lane that
-`.agents/skills/implement-story/references/delegation.md` sets: on Fable 5.2 at high
-effort (`.claude/agents/security-reviewer.md`), concurrently with the others.
+`.agents/skills/implement-story/references/delegation.md` sets.
 
 Invoke as `/threat-review [target]`, with targets as `code-review` takes them. Report
 in the conversation only: do not post, change code or files, merge, contact anyone, or
@@ -42,10 +39,10 @@ probe a real service, account or secret.
    in its `README.md`): today's Sheets token (ADR-003), the database's isolation and
    history (ADR-015), the repository's ruleset (ADR-016), the API stack (ADR-017), sign-in
    and sessions (ADR-018), authorisation (ADR-019), origins and HTTP hardening
-   (ADR-020); infrastructure-held protections in
-   `docs/backlog/EPC-023-hosting-and-infrastructure-security/README.md`; the root
-   `AGENTS.md` rules on tokens and untrusted data. Each ADR's _Accepted risks_ are the
-   owner's: not findings unless the change widens them.
+   (ADR-020), with the infrastructure epic ADR-020 names; the root `AGENTS.md` rules on
+   tokens and untrusted data. An ADR's accepted risks, and the exceptions it states (a
+   value it lets travel in a URL, a request it exempts from a rule), are the owner's:
+   not findings unless the change widens them.
 4. **Apply the lenses**: every general lens, then each area lens the change reaches.
    For each asset and actor, show the control that stops the actor, or report its
    absence.
@@ -69,9 +66,11 @@ probe a real service, account or secret.
 - **Fail closed.** A missing setting, an unknown permission, an absent tenant, an
   unreachable key set or a parse failure refuses rather than allows; a default is the
   production rule (ADR-017).
-- **Secrets and personal data.** No secret, token, code, cookie or email in source,
-  config, a URL, browser storage, a log, an error, a test fixture or the PR; personal
-  data minimised and its retention stated (ADR-018).
+- **Secrets and personal data.** No secret, access token, session ID, cookie or email
+  in source, config, browser storage, an application log, an error, a test fixture or
+  the PR. A value in a URL, which request logs and history keep, only where an
+  accepted ADR allows it and says what bounds it. Personal data minimised and its
+  retention stated (ADR-018).
 - **Abuse and availability.** What an anonymous caller can make the service write,
   compute or send; what limits it (the edge, ADR-020); what a provider outage stops.
 - **Proportionality.** A control's cost against this tool's scale (a handful of editors
@@ -80,36 +79,36 @@ probe a real service, account or secret.
 
 ## Area lenses
 
-- **Sign-in and sessions** (ADR-018): the sign-in transaction's binding (state, nonce,
-  PKCE, issuer, purpose) and the one state-changing `GET`; ID token validation and key
-  rollover; the identity key never an email; invitation tokens out of URLs that are
-  logged, hashed, single-use and atomic; linking guarded against a session someone
-  else holds; cookie attributes, session replacement, idle and absolute expiry,
-  revocation on the next request; the mock provider unreachable in a deployed
-  environment.
-- **Authorisation and tenancy** (ADR-015, ADR-019): every route declares a policy and
-  the default is deny; the request's tenant checked against membership; object checks
-  (assignment, retired); another tenant's IDs answer 404; row-level security forced,
-  settings per transaction, definer functions narrow and owned by a role without DDL;
-  platform jobs one command each, with their principal recorded.
-- **The browser** (ADR-020, ADR-003): same-origin proof on every write; no
-  credentialed CORS; no HTML built from untrusted text; CSP and framing; redirects
-  only to an allow-list; while the Sheets adapter lives, the Google token in memory
-  only.
-- **Untrusted input**: parsed at the boundary (Zod in the editor, Pydantic in the API);
-  SQL only through bound parameters; sizes and counts bounded; patterns safe from
+Each names a class of defect; the ADR holds the rule it is judged against.
+
+- **Sign-in and sessions** (ADR-018): a sign-in or link completed by someone other than
+  the browser that started it; an identity keyed or matched on a mutable claim; a token
+  or session that outlives its revocation or expiry; a test-only provider or setting
+  reachable in a deployed environment.
+- **Authorisation and tenancy** (ADR-015, ADR-019): a route with no declared policy; an
+  object reached without its own check (an assignment, a retired roadmap); one
+  tenant's data read, written or confirmed to exist from another; a database role or
+  function with more rights than its job; a privileged action without a recorded
+  principal.
+- **The browser and OAuth scopes** (ADR-020, ADR-003): a write accepted cross-site
+  outside the exceptions an ADR states; credentialed CORS; HTML built from untrusted
+  text; a redirect to an address off the allow-list; a scope wider than the feature
+  needs, or used without checking it was granted; while the Sheets adapter lives, its
+  token outside memory.
+- **Untrusted input**: data not parsed at the boundary (Zod in the editor, Pydantic in
+  the API); SQL built from strings; sizes and counts unbounded; patterns open to
   catastrophic backtracking.
-- **CI and supply chain** (ADR-016, CHO-031): workflow permissions, triggers that run
-  untrusted code (`pull_request_target`, `workflow_run`), actions pinned by SHA, cloud
-  identity conditioned on repository, ref and environment; a new dependency's
-  maintenance, provenance and release age.
-- **Infrastructure** (EPC-023): least-privilege IAM, no service account keys, private
-  database, logs that record who did what and who may read them, no real data outside
-  production.
+- **CI and supply chain** (ADR-016): a workflow that runs untrusted code with secrets or
+  write permissions; an action not pinned by SHA; cloud identity not conditioned on
+  repository, ref and environment; a new dependency unmaintained, unproven or just
+  released.
+- **Infrastructure** (ADR-020 and the epic it names): a grant wider than its job; a
+  long-lived key; a database reachable from outside; an action no log attributes, or
+  a log readable by more people than need it; real data outside production.
 - **A design record** (an ADR, epic, analysis or story that records a security
-  decision): every actor and boundary in step 2 has a stated control or a named,
-  owner-accepted residual risk; every technical claim is verified (step 5); the
-  record's own rules do not contradict one another or an accepted ADR.
+  decision): an actor or boundary from step 2 with neither a stated control nor a named,
+  owner-accepted residual risk; a technical claim not verified (step 5); rules that
+  contradict one another or an accepted ADR.
 
 ## Grading
 

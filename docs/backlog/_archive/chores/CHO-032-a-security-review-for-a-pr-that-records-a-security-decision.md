@@ -2,11 +2,12 @@
 
 - **Status**: Done — owner, 2026-11-21 (D1–D3); archived
 - **Type**: Chore
-- **Area**: Docs + CI/CD
+- **Area**: Docs
 - **Epic**: standalone
-- **Depends on**: none
+- **Depends on**: PR #222 (hard: the skill cites ADR-018 to ADR-020, accepted there;
+  merge it first)
 - **Binding ADRs**: none
-- **Suggested model**: Sonnet — an edit to one skill reference, once decided
+- **Suggested model**: Opus — a new review skill, its agent and the lane rules
 - **Delivered**: https://github.com/DHCW-Digital-Health-and-Care-Wales/roadmaps-editor/pull/223
 
 ## Summary
@@ -70,12 +71,15 @@ weighing.
 
 ## Decisions
 
-- **D1** (owner, 2026-11-21, on PR #222): a new skill for security-specific reviews,
-  invoked in parallel with the quality and correctness reviews (Q1 (a), as a skill of
-  its own).
-- **D2** (owner, 2026-11-21): it runs on Fable 5.2 at high effort (Q2 (a)).
-- **D3** (owner, 2026-11-21): it runs on security-relevant PRs, code or docs, judged by
-  the delivering agent against a list (Q3 (a)).
+- **D1** (owner, 2026-11-21): a new skill for security-specific reviews, invoked in
+  parallel with the quality and correctness reviews, over leaving the lane to the
+  owner's request or widening the correctness brief.
+- **D2** (owner, 2026-11-21): it runs on Fable 5.2 at high effort, a different model
+  family from the correctness pair.
+- **D3** (owner, 2026-11-21): it runs on security-relevant PRs, code or docs, those
+  handling authentication, sessions, tokens, OAuth scopes, authorisation, tenant
+  isolation, secrets, CI or deploy identity, or infrastructure-held protections, judged
+  by the delivering agent; over every PR, or only when asked.
 - **D4** (agent, 2026-11-21): named `threat-review`, since the runtime already offers a
   built-in `security-review`.
 
@@ -84,13 +88,11 @@ weighing.
 ### Departures
 
 - The lane's cost was not measured before the owner decided (Measurement): the owner
-  chose on PR #222's evidence. The first security-relevant PRs' Review records show
-  its cost.
-
-### Contract for dependents
-
-- A delivering agent judges each PR against the list in `delegation.md` _Review
-  rounds_ and records in the Review record whether the security lane ran.
+  chose on PR #222's evidence.
+- The security-relevant list in `delegation.md` widens D3's to code or configuration
+  that handles those concerns, untrusted input at a trust boundary, personal data in
+  logs and a new runtime dependency (agent, from review), so a PR carrying no new
+  decision but touching a protected asset still takes the lane.
 
 ### Scenario evidence
 

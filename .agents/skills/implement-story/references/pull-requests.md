@@ -12,7 +12,7 @@
    the same: fix one in scope, give one outside it a backlog record
    (`docs/AGENTS.md`), or decline it with a one-line reason in the Review
    record. An unresolved P0/P1 from either
-   correctness reviewer blocks a passing correctness verdict. Re-review the
+   correctness reviewer, or from the security reviewer, blocks a passing verdict. Re-review the
    final head after fixes, in the rounds `delegation.md` sets.
 3. Write the PR body to a temporary file from
    `.github/pull_request_template.md`, following its comments. The title is a
