@@ -15,11 +15,13 @@
 A docs-only pull request takes the correctness lane alone
 (`.agents/skills/implement-story/references/delegation.md`, _Review rounds_). PR #222
 recorded the identity and authorisation ADRs. On the owner's request it also had an
-independent security review, which found two session and linking gaps no correctness
-reviewer raised; the correctness lane found the most severe finding by priority. The
+independent security review (Fable 5.2, with its own brief), which found three gaps no
+correctness reviewer raised, two of them in sessions and linking; each lane raised one
+of round 2's two must-fix findings. The
 question: should a pull request that records or implements a security decision get a
 security review lane by default, on which model, and at what cost? Done: `delegation.md`
-says which pull requests take the lane and on which model, or the owner declines it.
+says which pull requests take the lane and on which model, or the owner declines it,
+with the lane's measured cost quoted when the owner decides.
 
 ## Measurement
 
@@ -36,9 +38,16 @@ record and the reviewers' reports in the delivering session:
 
 The security reviewer's brief asked for threats, wrong protocol claims and
 proportionality; the correctness briefs asked for requirement fidelity and
-contradictions. The lanes overlapped little. Its cost (one reviewer per round, its
-duration and tokens) is not recorded in the repository: measuring it, from the agent
-runtimes' session logs, is part of this chore.
+contradictions. The lanes overlapped little, but PR #222 changed the model and the brief
+together, so it cannot say which mattered.
+
+The lane's cost is not recorded in the repository, and measuring it comes before
+grilling: the security reviewer's tokens and wall time per round against one correctness
+reviewer's, on PR #222, from the delivering session's log
+(`node .agents/skills/retro/scripts/session-timeline.mjs <session.jsonl>`) and the agent
+runtimes' usage records. A security round costing no more than a correctness round is
+cheap; one costing more than both correctness reviewers together needs the owner's
+weighing.
 
 ## Acceptance criteria
 
@@ -56,11 +65,14 @@ _Written after grilling._
     owner remembering.
   - (c) No: widen the correctness brief with a threat lens — no new reviewer; the
     briefs grow, and PR #222 suggests the lenses compete for attention.
-- **Q2**: Which model runs it?
-  - (a) A different model family from the correctness pair (recommended) — the
-    independence PR #222 showed; one more provider to have available.
+- **Q2**: Which model runs it? Example: the security reviewer on the ingress ADR is
+  Fable, while Opus and Sol review correctness.
+  - (a) A different model family from the correctness pair (recommended) — PR #222
+    changed both model and brief, so it cannot separate them; a different family keeps
+    both levers; one more provider to have available.
   - (b) Opus — no new provider; overlaps the Opus correctness reviewer's blind spots.
-- **Q3**: Which PRs count as recording a security decision?
+- **Q3**: Which PRs count as recording a security decision? Example: the story that
+  builds ADR-018's sign-in, a code PR, raised after its ADR was reviewed.
   - (a) A PR that records or implements a decision on authentication, sessions,
     tokens, authorisation, tenancy isolation or infrastructure-held protections
     (recommended) — a list in the brief, judged by the delivering agent.
@@ -69,8 +81,3 @@ _Written after grilling._
   - (c) Any ADR — simpler to judge; more reviews of ADRs with no security content.
 
 ## Decisions
-
-## Out of scope
-
-- Which code pull requests take the lane: Q3 decides whether implementing a security
-  decision counts, as recording one does.
