@@ -1,6 +1,7 @@
 # STY-089: One copy of the spreadsheet fixtures, read by both apps
 
-- **Status**: Placeholder — promoted once ADR-016 is accepted
+- **Status**: Placeholder — ADR-016 accepted (owner, 2026-11-21); promoted once its
+  acceptance criteria are written
 - **Type**: Refactor
 - **Area**: Infrastructure + CI/CD
 - **Epic**: [EPC-022-monorepo-and-backend-foundation](README.md)
@@ -16,7 +17,7 @@ format fails both apps in the same pull request.
 
 ## Why this is a placeholder
 
-ADR-016 is Proposed.
+ADR-016 is accepted (2026-11-21), but the acceptance criteria are not yet written.
 
 ## Rough shape of the work
 

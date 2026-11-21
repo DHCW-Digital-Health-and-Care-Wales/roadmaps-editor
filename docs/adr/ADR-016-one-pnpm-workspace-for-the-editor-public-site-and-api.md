@@ -1,8 +1,8 @@
 # ADR-016: One pnpm workspace holds the editor, the public site and the API
 
-- Status: Proposed — drafted from the owner's answers in the EPC-022 monorepo grilling
-  (2026-11-21), for the owner's acceptance. Once accepted, ADR-007 is amended by the
-  stories that make each part true (_Consequences_).
+- Status: Accepted — owner, 2026-11-21; drafted from the owner's answers in the
+  EPC-022 monorepo grilling (2026-11-21). ADR-007 is amended by the stories that make
+  each part true (_Consequences_).
 - Date: 2026-11-21
 
 ## Context
@@ -123,7 +123,7 @@ moves the public site to the API's read later, with each tenant under its own ad
 - **The shared Pages origin** cannot tell the editor from the public site, which loads a
   third-party analytics script, or from any other organisation site. Tokens stay in
   memory only, and a custom domain for the editor is a precondition of switching the
-  deployed editor to the API: an input to the identity ADR.
+  deployed editor to the API: an input to the identity ADR (ADR-018, with ADR-020).
 - **ADR-007 is amended by the stories that make each part true:** STY-085 the base path
   `/roadmaps/`, STY-087 CI as jobs per app, STY-088 the public site's publishing from
   `product-roadmaps`; `docs/operations/github-pages-deployment.md` follows each.

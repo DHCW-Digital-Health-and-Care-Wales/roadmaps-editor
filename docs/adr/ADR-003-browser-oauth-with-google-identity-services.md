@@ -1,6 +1,7 @@
 # ADR-003: Browser OAuth with Google Identity Services token model
 
-- Status: Accepted
+- Status: Superseded by ADR-018 for the API data source; stands for the Sheets adapter
+  until the deployed editor switches to the API (owner, 2026-11-21)
 - Date: 2026-11-10 (amended in STY-003: port in `domain/auth/`, codes split, prompt policy;
   in STY-017: renewal from `connected`, the clock check on returning to the tab)
 

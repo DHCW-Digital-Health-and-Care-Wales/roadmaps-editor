@@ -5,7 +5,8 @@
   Cloud); a detailed history of who changed what, where, over many versions, with all
   past content viewable; nothing may preclude a tenancy per NHS Wales organisation;
   technical detail is settled during EPC-022.
-- Date: 2026-11-20
+- Date: 2026-11-20 (amended by ADR-018 and ADR-019, 2026-11-21: identities, sessions,
+  invitations, definer functions, permissions and platform jobs)
 
 ## Context
 
@@ -128,8 +129,8 @@ authorisation in theirs; this one binds the database, whatever writes to it.
 
 The database holds who may do what; the API checks it on every request, and the
 database enforces tenant isolation (Option 20), except for redaction, which the
-database also checks (Option 34). How people sign in belongs to the identity ADR; the
-permission catalogue and the shipped roles belong to the authorisation ADR (Option 35).
+database also checks (Option 34). How people sign in belongs to the identity ADR (ADR-018); the
+permission catalogue and the shipped roles belong to the authorisation ADR (ADR-019) (Option 35).
 
 - **A person has one or more sign-in identities** (Option 11): a provider (Microsoft or
   Google) and that provider's subject, unique together. A second identity is linked
@@ -142,7 +143,7 @@ permission catalogue and the shipped roles belong to the authorisation ADR (Opti
   permission granted to one person directly, later, without reworking roles.
 - **Editing a roadmap needs an assignment to it** (Option 13), except for a tenant's
   admins, who edit every roadmap (Option 23). Who may assign, and that whoever adds a
-  roadmap is assigned to it, are the authorisation ADR's (Options 16, 17).
+  roadmap is assigned to it, are the authorisation ADR's (ADR-019; Options 16, 17).
 - **Every change to memberships, roles, grants and assignments is a change set** of the
   tenant's access scope, so who gave whom access is history like any other.
 - **Writes to shared tables go to a platform audit log** (Option 27): a person created,
@@ -313,6 +314,38 @@ application's own role, and prove:
 
 EPC-022 names the suite.
 
+### ADR-018 and ADR-019 amendments
+
+Accepted by the owner on 2026-11-21 with ADR-018 (identity) and ADR-019
+(authorisation). Where these bullets differ from the text above, they hold; the rest
+stands.
+
+- **Sign-in identities** (Option 11): an identity is `(issuer, subject)`, never an
+  email. Only the person attaches one, through a guarded link (ADR-018); the person
+  (never their last) or a platform operator removes one, never a tenant admin.
+- **Shared tables** (_Tenancy_): sessions and sign-in transactions join `tenants`,
+  `people` and identities, each with row-level security.
+- **Definer functions** (_Tenancy_): beside the four above, the closed list gains
+  ADR-018's functions for sign-in transactions, sessions, the invitation lookup,
+  redemption and the retention purges, and ADR-019's platform procedures (issuing an
+  operator invitation, disabling a person and revoking their sessions, removing an
+  identity). ADR-018's functions are owned by a dedicated no-login role with only the
+  grants each needs, not by the schema owner.
+- **Invitations** (_People, access and permissions_): an invitation names an address,
+  not a person, until it is redeemed, rather than being a pending membership the
+  person-keyed policy reads; creating, revoking and redeeming one are access change
+  sets. A tenant keeps at least one admin, and admins review members every six months.
+- **The platform audit log** (Option 27) also records a person disabled and invitations
+  a platform job issues; it stays append-only and is never purged.
+- **Permissions** (Options 16, 22, 23, 33): the Product Lead role also holds
+  `roadmaps:edit` and `roadmaps:publish`; an admin's right to edit every roadmap is the
+  `roadmaps:edit-any` permission; a co-lead must hold `roadmaps:edit`, and a lead may
+  unassign themselves, even as the last; retired roadmaps are seen by their assigned
+  leads and holders of `roadmaps:edit-any`, and retired or reinstated by assigned
+  holders of `roadmaps:edit` and by holders of `roadmaps:edit-any`.
+- **Roles** (_Roles, operation and data protection_): platform jobs run under their
+  own database role and service account.
+
 ## Consequences
 
 - One write path: every draft, list and access write opens a change set and ends in the
@@ -337,7 +370,7 @@ EPC-022 names the suite.
 - STY-048 (removing a roadmap) is bound by Options 8 and 33: retired, never deleted, and
   reinstated from a retired view.
 - Follow-on records: the API stack ADR (ADR-017); an identity ADR for Microsoft and
-  Google sign-in (successor to ADR-003); an authorisation ADR holding the permission
+  Google sign-in (successor to ADR-003; ADR-018); an authorisation ADR (ADR-019) holding the permission
   catalogue, the shipped roles (Option 22) and who assigns leads (Options 16, 17);
   EPC-022 delivers the first schema and sets the scratch's expiry (Option 24).
   Infrastructure as code is a later epic.
@@ -397,9 +430,9 @@ Grilling rounds 1–5 after the second review, and rounds 6–7 after the third.
     fractional.
 15. **List entries** (round 2) — ✅ retired, never deleted; over deleting when unused.
 16. **Assigning leads** (round 3) — ✅ an admin, or an assigned lead adding co-leads.
-    Recorded in the authorisation ADR.
+    Recorded in the authorisation ADR (ADR-019).
 17. **Adding a roadmap** (round 3) — ✅ any Product Lead, assigned to it. Recorded in the
-    authorisation ADR.
+    authorisation ADR (ADR-019).
 18. **The public Product Lead field** (round 3) — ✅ free text, over derived from
     assignments.
 19. **Permissions** (round 4) — ✅ a fixed catalogue bundled into tenant roles, not
@@ -408,7 +441,7 @@ Grilling rounds 1–5 after the second review, and rounds 6–7 after the third.
     isolates tenants.
 21. **Creating tenants** (round 5) — ✅ platform operators; over self-service.
 22. **The Product Lead role** (round 5) — ✅ `roadmaps:create` and `tags:edit`; every
-    other permission is admin-only by default. Recorded in the authorisation ADR.
+    other permission is admin-only by default. Recorded in the authorisation ADR (ADR-019).
 23. **Admins and roadmaps** (round 5) — ✅ admins edit every roadmap.
 24. **Scratch expiry** (round 5) — ✅ 30 days, warned at 23. Recorded in EPC-022.
 25. **The unit of a merge** (round 6) — ✅ a field, as ADR-012's conflicts are; over an
@@ -433,7 +466,7 @@ Grilling rounds 1–5 after the second review, and rounds 6–7 after the third.
     too; the marker replaces content everywhere it is held; over an API-only check, and
     history only.
 35. **What ADR-015 holds** (round 6) — ✅ the schema's shape; the permission catalogue
-    and roles move to the authorisation ADR, the expiry to EPC-022.
+    and roles move to the authorisation ADR (ADR-019), the expiry to EPC-022.
 
 The technical set (round 3, the owner's walk-through of the second review's findings):
 ✅ a plain no-login schema owner; ✅ a replay matches key, tenant, person and request

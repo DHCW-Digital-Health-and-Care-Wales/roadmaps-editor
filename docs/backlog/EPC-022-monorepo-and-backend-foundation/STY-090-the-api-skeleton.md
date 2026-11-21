@@ -1,6 +1,7 @@
 # STY-090: The API skeleton runs locally and in CI
 
-- **Status**: Placeholder — promoted once ADR-017 is accepted
+- **Status**: Placeholder — ADR-017 accepted (owner, 2026-11-21); promoted once its
+  acceptance criteria are written
 - **Type**: Feature
 - **Area**: API + CI/CD
 - **Epic**: [EPC-022-monorepo-and-backend-foundation](README.md)
@@ -17,7 +18,7 @@ holds no roadmap data yet.
 
 ## Why this is a placeholder
 
-ADR-017 is Proposed.
+ADR-017 is accepted (2026-11-21), but the acceptance criteria are not yet written.
 
 ## Rough shape of the work
 

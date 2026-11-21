@@ -1,10 +1,11 @@
 # EPC-022: Monorepo and backend foundation — an API and its database beside the Sheets editor
 
-- **Status**: Needs grilling — the repository and API foundation is split (STY-085–STY-093);
-  the schema and endpoint stories wait on the identity and authorisation ADRs
-- **Progress**: 0 of 9 terminal; next selectable: none; blocked on: accepting ADR-016 and
-  ADR-017
-- **Binding ADRs**: ADR-015, ADR-016, ADR-017, ADR-002
+- **Status**: Active — every binding ADR is accepted (owner, 2026-11-21); the
+  placeholders' acceptance criteria, then the schema, identity and endpoint stories, are
+  written next
+- **Progress**: 0 of 10 terminal; next selectable: none; blocked on: STY-085's acceptance
+  criteria
+- **Binding ADRs**: ADR-015, ADR-016, ADR-017, ADR-018, ADR-019, ADR-020, ADR-002
 
 ## Summary
 
@@ -22,15 +23,7 @@ environments are later epics.
 
 ## Owner decisions waiting
 
-- [ADR-016](../../adr/ADR-016-one-pnpm-workspace-for-the-editor-public-site-and-api.md)
-  — Proposed: accept the workspace, the rename and the public site's move
-- [ADR-017](../../adr/ADR-017-the-api-is-synchronous-fastapi-over-sqlalchemy-and-psycopg.md)
-  — Proposed: accept the API stack
-- An identity ADR (successor to ADR-003) — sign-in with both Microsoft and Google (owner,
-  2026-11-20), linking identities as ADR-015 Option 11 holds them; ADR-016 adds tokens
-  in memory and a custom domain for the editor before it switches to the API
-- An authorisation ADR — the permission catalogue, the shipped roles and how the API
-  checks them and who assigns leads (ADR-015 Options 16, 17, 19–23)
+None. ADR-016 to ADR-020 were accepted on 2026-11-21.
 
 ## Findings
 
@@ -99,8 +92,22 @@ Owner answers of 2026-11-21 (monorepo grilling), drafted into ADR-016 and ADR-01
 11. **The API stack**: ADR-017, including the public read (no key, open CORS, OGL v3.0,
     current publications only) and the seeder, which starts right after the migrations.
 
-_The schema and endpoint design is written once the identity and authorisation ADRs
-exist._
+Owner answers of 2026-11-21 (identity and authorisation grilling, and the review of
+its drafts), from the
+[identity and authorisation analysis](../../analysis/identity-and-authorisation.md):
+
+12. **Sign-in**: through the API, with DHCW's Google Workspace first and Entra next,
+    after which Google is retired; an opaque server-side session; a person exists only
+    once an invitation is redeemed (ADR-018); asking for access later (STY-094).
+13. **Authorisation**: a permission catalogue in code, Admin, Product Lead and Viewer,
+    every route declaring a policy, every request naming its tenant (ADR-019).
+14. **Origins**: the editor and the API on one origin in every environment, the public
+    read on its own host (ADR-020).
+15. **Supply-chain checks**: CHO-031, beside STY-087.
+16. **Infrastructure-held protections**: EPC-023, a placeholder.
+
+_The schema, identity and endpoint stories are written next, from ADR-015 and ADR-018 to
+ADR-020._
 
 ## Shared assumptions and contracts
 
@@ -118,25 +125,30 @@ the seeder for any table it creates.
 
 ## Stories
 
-| ID      | Story                                                                                               | Area                   | Depends on | State |
-| ------- | --------------------------------------------------------------------------------------------------- | ---------------------- | ---------- | ----- |
-| STY-085 | [Rename the repository to roadmaps](STY-085-rename-the-repository-to-roadmaps.md)                   | CI/CD + Docs           | —          |       |
-| STY-086 | [Move the editor into apps/editor](STY-086-move-the-editor-into-a-pnpm-workspace.md)                | CI/CD + Docs           | STY-085    |       |
-| STY-087 | [Workspace tooling and the ruleset](STY-087-workspace-tooling-and-the-main-ruleset.md)              | CI/CD                  | STY-086    |       |
-| STY-088 | [Bring the public site in](STY-088-bring-the-public-site-into-the-workspace.md)                     | CI/CD + Docs           | STY-087    |       |
-| STY-089 | [One copy of the spreadsheet fixtures](STY-089-one-copy-of-the-spreadsheet-fixtures.md)             | Infrastructure + CI/CD | STY-088    |       |
-| STY-090 | [The API skeleton](STY-090-the-api-skeleton.md)                                                     | API + CI/CD            | STY-086    |       |
-| STY-091 | [Migrations, tenant listener, test harness](STY-091-migrations-tenant-listener-and-test-harness.md) | API                    | STY-090    |       |
-| STY-092 | [The OpenAPI contract and schemas](STY-092-the-openapi-contract-and-generated-schemas.md)           | API + Infrastructure   | STY-090    |       |
-| STY-093 | [A deterministic seeder](STY-093-a-deterministic-seeder.md)                                         | API                    | STY-091    |       |
+| ID      | Story                                                                                               | Area                   | Depends on  | State |
+| ------- | --------------------------------------------------------------------------------------------------- | ---------------------- | ----------- | ----- |
+| STY-085 | [Rename the repository to roadmaps](STY-085-rename-the-repository-to-roadmaps.md)                   | CI/CD + Docs           | —           |       |
+| STY-086 | [Move the editor into apps/editor](STY-086-move-the-editor-into-a-pnpm-workspace.md)                | CI/CD + Docs           | STY-085     |       |
+| STY-087 | [Workspace tooling and the ruleset](STY-087-workspace-tooling-and-the-main-ruleset.md)              | CI/CD                  | STY-086     |       |
+| STY-088 | [Bring the public site in](STY-088-bring-the-public-site-into-the-workspace.md)                     | CI/CD + Docs           | STY-087     |       |
+| STY-089 | [One copy of the spreadsheet fixtures](STY-089-one-copy-of-the-spreadsheet-fixtures.md)             | Infrastructure + CI/CD | STY-088     |       |
+| STY-090 | [The API skeleton](STY-090-the-api-skeleton.md)                                                     | API + CI/CD            | STY-086     |       |
+| STY-091 | [Migrations, tenant listener, test harness](STY-091-migrations-tenant-listener-and-test-harness.md) | API                    | STY-090     |       |
+| STY-092 | [The OpenAPI contract and schemas](STY-092-the-openapi-contract-and-generated-schemas.md)           | API + Infrastructure   | STY-090     |       |
+| STY-093 | [A deterministic seeder](STY-093-a-deterministic-seeder.md)                                         | API                    | STY-091     |       |
+| STY-094 | [Ask for access to a tenant](STY-094-ask-for-access-to-a-tenant.md)                                 | API                    | invitations |       |
 
-_All Placeholders until ADR-016 (STY-085–STY-089) and ADR-017 (STY-090–STY-093) are
-accepted.
-Candidate scope, to split after the identity and authorisation ADRs: the first schema
-and its enforcement suite; people, memberships, roles and assignments; the scratch, draft,
-save, publish and restore path; the API's endpoints for the roadmap repository's
-calls and for the public read; the import of the spreadsheet's data; and the
-editor's API adapter with its build-time switch._
+_All Placeholders until their acceptance criteria are written: ADR-016 (STY-085–STY-089)
+and ADR-017 (STY-090–STY-093) are accepted.
+STY-094 is a Placeholder until the invitation story exists.
+Candidate scope, to split next: the first schema
+and its enforcement suite; people, identities, memberships, roles, assignments and
+invitations, with ADR-019's authorisation suite; the threat model, then sign-in with
+Google and the mock provider, sessions and signing out (ADR-018); the scratch, draft,
+save, publish and restore path; the API's endpoints for the roadmap repository's calls
+and for the public read; the import of the spreadsheet's data; and the editor's API
+adapter with its build-time switch, signing in through the API. Entra, with its spike,
+is a later story._
 
 ## Sequencing
 
@@ -144,7 +156,9 @@ The rename (STY-085) comes first, then the workspace move (STY-086), which stays
 change. Then two tracks run in parallel: the repository's (STY-087, then STY-088 into
 a protected `main`, then STY-089) and the API's (STY-090, then STY-091 and STY-092 in
 either order, with STY-093 after STY-091). STY-090 and STY-087 both change `ci.yml`
-and the Dependabot file: whichever lands second rebases onto the other. The schema
+and the Dependabot file: whichever lands second rebases onto the other, and so does
+CHO-031 (supply-chain checks), delivered beside STY-087. The threat model comes before
+any identity story (ADR-018); STY-094 follows the invitation story. The schema
 stories follow STY-093, adding their factories; the editor's adapter follows STY-092.
 
 ## Out of scope
@@ -154,11 +168,11 @@ stories follow STY-093, adding their factories; the editor's adapter follows STY
   API exists.
 - Switching the deployed editor to the API, retiring the Sheets adapter, and moving
   the public site to the API's read: after an environment exists.
-- Infrastructure as code and provisioned environments: a later epic, handed a service
-  that runs locally and in CI.
+- Infrastructure as code, provisioned environments, Google Cloud hosting and custom
+  domains: [EPC-023](../EPC-023-hosting-and-infrastructure-security/README.md), handed
+  a service that runs locally and in CI. A cross-repository deploy trigger was rejected
+  (ADR-016), not deferred.
 - Live presence and real-time updates.
-- Google Cloud hosting and custom domains: the infrastructure epic. A
-  cross-repository deploy trigger was rejected (ADR-016), not deferred.
 
 ## Defects
 
@@ -169,8 +183,16 @@ None.
 - [ADR-015](../../adr/ADR-015-the-roadmap-database-is-postgresql-tenant-scoped-and-versioned.md),
   [ADR-016](../../adr/ADR-016-one-pnpm-workspace-for-the-editor-public-site-and-api.md),
   [ADR-017](../../adr/ADR-017-the-api-is-synchronous-fastapi-over-sqlalchemy-and-psycopg.md),
+  [ADR-018](../../adr/ADR-018-sign-in-through-the-api-with-a-server-side-session.md),
+  [ADR-019](../../adr/ADR-019-the-api-authorises-every-route-from-a-permission-catalogue-in-code.md),
+  [ADR-020](../../adr/ADR-020-the-editor-and-the-api-share-one-origin.md),
   [ADR-002](../../adr/ADR-002-layered-architecture-and-repository-boundary.md)
+- [Identity and authorisation analysis](../../analysis/identity-and-authorisation.md)
+- [EPC-023](../EPC-023-hosting-and-infrastructure-security/README.md) — hosting and
+  infrastructure security, a placeholder
 - [Replacing Google Sheets](../../operations/replacing-google-sheets.md)
 - [STY-048](../EPC-011-adding-roadmaps-and-items/STY-048-remove-a-roadmap.md) —
   removing a roadmap, bound by ADR-015 Option 8
 - [CHO-005](../chores/CHO-005-send-last-updated-to-the-api-in-utc.md)
+- [CHO-031](../chores/CHO-031-supply-chain-checks-on-every-pull-request.md) —
+  supply-chain checks, beside STY-087

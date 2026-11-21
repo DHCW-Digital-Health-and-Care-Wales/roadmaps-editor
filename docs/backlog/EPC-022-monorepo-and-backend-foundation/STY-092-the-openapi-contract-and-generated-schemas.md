@@ -1,6 +1,7 @@
 # STY-092: The OpenAPI contract and the editor's generated schemas
 
-- **Status**: Placeholder — promoted once ADR-017 is accepted
+- **Status**: Placeholder — ADR-017 accepted (owner, 2026-11-21); promoted once its
+  acceptance criteria are written
 - **Type**: Feature
 - **Area**: API + Infrastructure
 - **Epic**: [EPC-022-monorepo-and-backend-foundation](README.md)
@@ -17,7 +18,7 @@ editor's build then fails if the API emits an error code its adapter does not ma
 
 ## Why this is a placeholder
 
-ADR-017 is Proposed.
+ADR-017 is accepted (2026-11-21), but the acceptance criteria are not yet written.
 
 ## Rough shape of the work
 

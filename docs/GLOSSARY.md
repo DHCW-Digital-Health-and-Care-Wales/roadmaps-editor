@@ -25,7 +25,7 @@ _Avoid_: Customer, end user
 **Public site**:
 The separate app that reads the shared data source and shows published roadmaps to
 public readers. This tool never renders it.
-_Avoid_: Viewer, front end, website
+_Avoid_: Viewer (a role in this tool), front end, website
 
 ### Roadmaps
 
@@ -290,6 +290,44 @@ An NHS Wales organisation that keeps its own roadmaps, lists and people in this 
 DHCW is the first. Nothing one tenant holds is visible to another.
 _Avoid_: Organisation (a body a roadmap item's work is for), account, workspace
 
+**Directory** _(planned)_:
+Microsoft's register of people who can sign in with a work account; NHS Wales has one,
+shared by all its organisations. Microsoft calls it a tenant, but it never says which of
+this tool's tenants someone belongs to (ADR-018).
+_Avoid_: Tenant (for Microsoft's), Entra tenant
+
+**Invitation** _(planned)_:
+An offer of a membership to one email address, made by a tenant admin (or, for a
+tenant's first admin, a platform operator), redeemed by that person signing in with the
+link; the only way into a tenant (ADR-018).
+_Avoid_: Sign-up, registration
+
+**Membership** _(planned)_:
+A person's place in one tenant, with the roles they hold there; a person can have
+memberships in several tenants (ADR-015, ADR-019).
+_Avoid_: Account, seat
+
+**Sign-in identity** _(planned)_:
+One account a person signs in with, at Google or in the NHS Wales directory, known by
+its issuer and that issuer's ID for it, never by email; a person can have more than
+one (ADR-018).
+_Avoid_: Login, account, user
+
+**Platform operator** _(planned)_:
+A DHCW engineer who runs the platform's jobs, such as creating a tenant; holds no tenant
+access unless invited like anyone else (ADR-019).
+_Avoid_: Admin (a tenant's role), superuser
+
+**Admin** _(planned)_:
+A tenant's role that holds every permission but `roadmaps:edit`, and edits every
+roadmap (ADR-019).
+_Avoid_: Owner, superuser, operator (someone who runs the platform, not a tenant)
+
+**Viewer** _(planned)_:
+A tenant's role that reads every current roadmap, draft and history and changes nothing
+(ADR-019).
+_Avoid_: Reader, guest
+
 **Assignment** _(planned)_:
 A Product Lead's right to edit one roadmap. Admins edit every roadmap without one. Not
 the roadmap's public "Product Lead" text.
@@ -328,7 +366,8 @@ _Avoid_: Deleted, archived, removed
 ### Connection
 
 Plumbing: these terms matter while Google is the data source, and copy keeps them out of
-the Product Lead's way.
+the Product Lead's way. With the API, people sign in and hold a server-side session
+instead (ADR-018), and these terms retire with the Sheets adapter.
 
 **Connection**:
 The user's authorisation for the app to read and write the data source on their

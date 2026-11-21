@@ -1,6 +1,7 @@
 # STY-085: Rename the repository to roadmaps, and tell leads the editor's new address
 
-- **Status**: Placeholder — promoted once ADR-016 is accepted
+- **Status**: Placeholder — ADR-016 accepted (owner, 2026-11-21); promoted once its
+  acceptance criteria are written
 - **Type**: Docs
 - **Area**: CI/CD + Docs
 - **Epic**: [EPC-022-monorepo-and-backend-foundation](README.md)
@@ -16,7 +17,7 @@ old one gets no redirect. Nothing in the editor changes.
 
 ## Why this is a placeholder
 
-ADR-016 is Proposed; the rename is hard to reverse once leads have the new address.
+ADR-016 is accepted (2026-11-21), but the acceptance criteria are not yet written, and the rename is hard to reverse once leads have the new address.
 
 ## Rough shape of the work
 
