@@ -188,12 +188,12 @@ recurs, rather than only for the reported trigger or at the reported line:
 ask what else reaches that cause and test it too; for a changed term or
 label, search the changed files and both catalogues for the old form; for a
 changed behaviour, search the code, tests and records for lines that describe
-the old behaviour and correct them; for tests a fix moves to a lower seam or
-merges, break what the wiring test left above passes down and see it fail. Run
-the checks `references/validation.md` sets for a fix between review rounds,
-commit the fixes and re-review the new head in the lanes and rounds
-`delegation.md` sets; the gate `validation.md` sets for a pushed head waits for
-the push.
+the old behaviour and correct them. When a fix moves or merges tests into a lower
+seam, break each value the wiring test above passes down, such as a setting or a
+flag, and see that test fail. Run the checks `references/validation.md` sets for
+a fix between review rounds, commit the fixes and re-review the new head in the
+lanes and rounds `delegation.md` sets; the gate `validation.md` sets for a pushed
+head waits for the push.
 An unavailable reviewer is a stated limitation, not an invented independent
 review.
 

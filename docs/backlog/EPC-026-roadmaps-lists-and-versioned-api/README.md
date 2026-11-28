@@ -32,11 +32,13 @@ ADR-019 on 2026-11-25:
 - `EPC-024` establishes `tenants`, `people`, `identities`, `roles`, `memberships`,
   `change_sets` (access scope), the commit function, `platform_audit_log`, the
   authorisation framework and the deterministic seeder (`STY-093`).
-- Noted after `STY-105`: `tenant_permission`
+- Noted after `STY-105`: a route declares exactly one policy, and `tenant_permission`
   (`apps/api/src/roadmaps_api/authz/policies.py`) names one permission. ADR-019's
   roadmap rules need more: editing takes `roadmaps:edit` with an assignment to the
-  roadmap, or `roadmaps:edit-any`, and publishing takes `roadmaps:publish` as well. The
-  editing stories design how a route declares and checks that.
+  roadmap, or `roadmaps:edit-any`, and publishing takes `roadmaps:publish` as well.
+  ADR-019 (_Enforcement_) puts the assignment check in a service; the editing stories
+  settle which policy the edit and publish routes declare and where the other
+  permission is checked.
 - ADR-015 already settles the core database rules: normalised working tables with
   `tenant_id` foreign keys and forced RLS, integer positions rewritten per placement,
   details as format-checked bilingual text, private JSONB scratch per person per roadmap,

@@ -100,7 +100,8 @@ Do not spend findings on rules CI already enforces; inspect the touched app's
 config (`eslint.base.ts`, `apps/editor/eslint.config.ts`,
 `apps/editor/build/design-token-lint.ts`, `apps/editor/build/e2e-lint.ts`,
 `apps/public-site/eslint.config.ts`, `apps/api/pyproject.toml`,
-`apps/api/tools/check_transactions.py`) and flag only evasions (`eslint-disable`,
+`apps/api/tools/check_transactions.py`, `apps/api/tools/check_permissions.py`) and
+flag only evasions (`eslint-disable`,
 `# noqa` without reason, `@ts-expect-error`, casts, re-exports, moved files) and
 these blind spots:
 
