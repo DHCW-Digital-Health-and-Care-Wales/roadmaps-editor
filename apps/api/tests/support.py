@@ -24,7 +24,7 @@ from sqlalchemy import text
 from sqlalchemy.orm import Session, sessionmaker
 
 # Imported only to raise one, as FastAPI's routing would for a status it never uses.
-from starlette.exceptions import HTTPException  # noqa: TID251
+from starlette.exceptions import HTTPException  # noqa: TID251 - raised as routing would
 
 from roadmaps_api.app import create_app
 from roadmaps_api.authz import PolicyAPIRoute, public

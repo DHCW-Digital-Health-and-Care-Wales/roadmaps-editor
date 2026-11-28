@@ -167,13 +167,15 @@ General lenses:
   has lost), since a native `<select>` shows its first enabled option for a
   value it lacks.
 - **Evidence covers less than its claim.** Where code or a test infers a fact
-  from indirect evidence (a first fetch, a status badge, a fake that always
-  grants, "all tests pass" when E2E was skipped, a Welsh string the author
-  cannot read), name a realistic input that makes it lie, and check the code
-  reads the effect itself or reports the result as unknown. The fakes agree
-  with Google only as far as they were written to: a new Sheets or GIS call
-  needs the fake extended, and the live behavior stays unverified until the
-  manual check in `docs/operations/google-cloud-setup.md`.
+  from indirect evidence (a first fetch, a status badge, a refusal that more
+  than one check returns, a fake that always grants, "all tests pass" when E2E
+  was skipped, a Welsh string the author cannot read), name a realistic input
+  that makes it lie, and check the code reads the effect itself or reports the
+  result as unknown. A test of one check fails without it: its case gets past
+  every earlier one, and it asserts what no other path produces. The fakes
+  agree with Google only as far as they were written to: a new Sheets or GIS
+  call needs the fake extended, and the live behavior stays unverified until
+  the manual check in `docs/operations/google-cloud-setup.md`.
 - **Tests (ADR-006).** Vitest and Playwright specs exercise the failure path
   through real contracts and fail before a behavioral fix. Component tests go
   through `renderWithProviders` (real `AppProviders`, fake `AuthClient`,

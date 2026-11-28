@@ -236,7 +236,7 @@ def test_a_probe_that_succeeds_writes_no_access_line(lines: Lines, database_url:
 
 
 def test_another_library_s_message_and_arguments_are_dropped(lines: Lines) -> None:
-    logging.getLogger("uvicorn.error").warning(f"Error loading ASGI app. {PLANTED}")  # noqa: G004
+    logging.getLogger("uvicorn.error").warning(f"Error loading ASGI app. {PLANTED}")  # noqa: G004 - a library's f-string
     logging.getLogger("sqlalchemy.pool").warning("Lost %s", PLANTED)
     logging.getLogger("roadmaps_api.anything").info("event %s", PLANTED)
     logging.getLogger("roadmaps_api").info(ValueError(PLANTED))

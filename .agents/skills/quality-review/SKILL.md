@@ -28,8 +28,8 @@ report in the conversation only.
 - **Anything a tool enforces.** Formatting (`pnpm format:check`), `actionlint`,
   and the app lint, type, layering and coverage configs listed in
   `.agents/skills/code-review/SKILL.md` (_Tooling already enforces_). Flag only
-  evasions (`eslint-disable` or `# noqa` without reason, layer leaks through
-  re-exports) and the blind spots that section names.
+  evasions (`eslint-disable` without reason, a `# noqa` whose reason does not
+  hold, layer leaks through re-exports) and the blind spots that section names.
 - **Taste with no cost.** If you cannot say what it makes easier, cheaper or
   safer for the next reader, drop it.
 
@@ -90,7 +90,8 @@ report in the conversation only.
      agrees to that exception; same concept named differently across layers
      (`remove`/`delete`/`clear`, `roadmap`/`sheet`/`board`).
    - **Dead or false text.** No-op assignments, unused parameters, exports or
-     branches, suppressions with no reason, comments that went stale,
+     branches, suppressions whose reason is missing or does not hold, comments
+     that went stale,
      including "left for S0n" or "TODO" after the story closed. Beyond the
      diff: README, ADRs, `AGENTS.md` guides, `delivery-notes.md`, workflows,
      scripts and config that a changed command, key, route or default now

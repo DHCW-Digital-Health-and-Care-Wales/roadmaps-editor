@@ -176,8 +176,8 @@ def locations_app() -> FastAPI:
 
     @app.get("/test/parameters/{itemId}", dependencies=[public()])
     def parameters(
-        itemId: int,  # noqa: N803 the wire's name, as a path template spells it
-        ids: Annotated[list[int], Query(alias="itemIds")] = [],  # noqa: B006 FastAPI copies it
+        itemId: int,  # noqa: N803 - the wire's name, as a path template spells it
+        ids: Annotated[list[int], Query(alias="itemIds")] = [],  # noqa: B006 - FastAPI copies it
         x_page: Annotated[int, Header()] = 1,
     ) -> None: ...
 

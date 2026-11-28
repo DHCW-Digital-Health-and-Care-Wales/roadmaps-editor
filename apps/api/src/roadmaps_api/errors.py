@@ -21,7 +21,7 @@ from fastapi.responses import JSONResponse
 
 # The one reference to it: FastAPI raises it for an unknown path or method and an
 # unreadable body, so its handler is registered here. Routes raise `ApiError`.
-from starlette.exceptions import HTTPException  # noqa: TID251
+from starlette.exceptions import HTTPException  # noqa: TID251 - to register its handler
 
 from roadmaps_api.wire import ApiResponseModel
 
