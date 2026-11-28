@@ -47,6 +47,15 @@ src = ["src", "."]
 
 [tool.ruff.lint]
 select = ["ALL"]
+# A name a package keeps private is no API: it changes without notice (PLC2701). The rule
+# is in Ruff's preview. `explicit-preview-rules` keeps `ALL` from selecting any other
+# preview rule, though `preview` also turns on stable rules' preview behaviour. Without
+# `preview` Ruff only warns that PLC2701 does nothing (apps/api/tests/test_ruff_config.py).
+# Added 2026-11-28: lint passed an import of one of FastAPI's private names, which review
+# had to catch (PR #344). Review by 2027-02-26.
+preview = true
+explicit-preview-rules = true
+extend-select = ["PLC2701"]
 # Each rule left out, with its reason (ADR-017 Tooling):
 ignore = [
   "COM812", # trailing commas are the formatter's, which this rule fights

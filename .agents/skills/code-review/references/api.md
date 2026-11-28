@@ -13,8 +13,8 @@ failure modes CI cannot catch.
   that each `SECURITY DEFINER` routine is owned by its dedicated definer role (never
   `roadmaps_owner`) with a pinned `search_path` ending in `pg_temp`.
 - **Transaction error paths.** Trace exceptions inside services for partial
-  commits or leaked sessions, and check routes/repositories for renamed session
-  helpers that bypass `apps/api/tools/check_transactions.py`.
+  commits or leaked sessions, and check routes, `authz` modules and repositories
+  for renamed session helpers that bypass `apps/api/tools/check_transactions.py`.
 - **Error-code drift and leaks.** Check every new or changed `ErrorCode` against
   its HTTP status, editor adapter mapping (`apps/api/AGENTS.md`, _Errors and
   responses_), and unhandled or `params` paths that could echo caller input or

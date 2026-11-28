@@ -16,6 +16,10 @@ harness's fixtures.
   `alembic_version`, so the revision `/ready` reads stays.
 - Only the harness holds the superuser connection (`worker_admin`, `harness.admin()`).
   Use it to set up what a test needs and to read catalogs, never as the login under test.
+- Set up the tenants, people, roles, memberships and invitations a test needs but does
+  not itself exercise with the factories in `apps/api/tools/seed/factories.py` over
+  `harness.admin_session`, not raw SQL, putting roles, role permissions, memberships and
+  invitations inside its `system_access_change_set`.
 - Roles are shared by every worker on the cluster: a test that changes a role, a
   membership or a role's grants does it on throwaway roles of its own
   (`harness.unique_name`) and drops them, as `test_bootstrap.py` and `test_readiness.py`

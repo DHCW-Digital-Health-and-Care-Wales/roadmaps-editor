@@ -23,7 +23,6 @@ from sqlalchemy.orm import Session
 from roadmaps_api.database import TENANT_POLICY
 from roadmaps_api.migrate import upgrade
 from roadmaps_api.roles import APP_ROLE, OWNER_ROLE, database_scoped_sql
-from tools._local_db import ADMIN_DATABASE_URL, PUBLIC_TABLES_QUERY, VERSION_TABLE
 from tools.bootstrap_database import (
     APP_LOGIN,
     LOCAL_PASSWORD,
@@ -32,6 +31,7 @@ from tools.bootstrap_database import (
     PURGE_LOGIN,
     libpq_url,
 )
+from tools.local_db import ADMIN_DATABASE_URL, PUBLIC_TABLES_QUERY, VERSION_TABLE
 
 # Owned by the owner role, under forced row-level security with the policy ADR-015's
 # tenant-owned tables use (STY-091 D13, D33). Not a migration's: the drift check leaves

@@ -111,9 +111,9 @@ these blind spots:
   class/style sites, not class strings stored outside configured variable names
   or style objects passed under non-`style` props.
 - **API checks**: `apps/api/tools/check_transactions.py` matches direct
-  `.commit()`/`.rollback()`/`.begin()` calls in routes and repositories, not
-  renamed wrappers; `ruff` and `ty` do not verify log-value provenance or
-  uvicorn-only behaviour.
+  `.commit()`/`.rollback()`/`.begin()` calls in routes, `authz` modules and
+  repositories, not renamed wrappers; `ruff` and `ty` do not verify log-value
+  provenance or uvicorn-only behaviour.
 
 ## Lenses
 

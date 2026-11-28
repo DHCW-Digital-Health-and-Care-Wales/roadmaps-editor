@@ -11,7 +11,7 @@ from sqlalchemy.orm import Session
 
 from roadmaps_api.authz import ShippedRoleKey
 from roadmaps_api.models import Invitation, Membership, Person, PlatformAuditLog, Role, Tenant
-from tools._local_db import truncate_public_tables
+from tools.local_db import truncate_public_tables
 from tools.seed.deterministic import (
     ANCHOR_TIME,
     DEFAULT_SEED,
