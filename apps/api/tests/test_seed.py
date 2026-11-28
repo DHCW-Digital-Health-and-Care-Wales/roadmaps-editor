@@ -14,7 +14,7 @@ import pytest
 from roadmaps_api.authz import ShippedRoleKey
 from roadmaps_api.settings import ENV, SettingsError
 from tests.support import DOWN_DATABASE_URL, Lines
-from tools._local_db import ADMIN_DATABASE_URL
+from tools.local_db import ADMIN_DATABASE_URL
 from tools.seed.cli import format_summary, main, parse_args
 from tools.seed.deterministic import (
     DEFAULT_SEED,

@@ -34,7 +34,7 @@ from roadmaps_api.roles import (
     bootstrap_sql,
 )
 from roadmaps_api.settings import SettingsError, refuse
-from tools._local_db import (
+from tools.local_db import (
     ADMIN_DATABASE_URL,
     SUPERUSER_QUERY,
     validated_local_admin_url,

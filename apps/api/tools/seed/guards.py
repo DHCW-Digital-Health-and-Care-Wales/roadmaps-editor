@@ -16,7 +16,7 @@ from sqlalchemy import Connection, Engine, create_engine, text
 from sqlalchemy.pool import NullPool
 
 from roadmaps_api.settings import refuse
-from tools._local_db import (
+from tools.local_db import (
     ADMIN_DATABASE_URL,
     SUPERUSER_QUERY,
     invalid_local_env,

@@ -12,11 +12,12 @@ the root, unversioned (ADR-017's amendments).
 
 ## Layering (ADR-017)
 
-- A route calls a service; a service calls repositories; nothing imports a layer above
-  it (`roadmaps_api.routes`, `.services`, `.repositories`; `roadmaps_api.app` composes
-  them). Routes stay thin and synchronous (`def`).
-- Only a service ends a transaction; a route or repository never calls `commit()`,
-  `rollback()` or `begin()` on a session. `/ready` is the worked example
+- A route calls a service; a service or `authz` calls repositories; nothing imports a
+  layer above it (highest first: `roadmaps_api.routes`, `.services`, `.authz`,
+  `.repositories`; `roadmaps_api.app` composes them). Routes stay thin and synchronous
+  (`def`).
+- Only a service ends a transaction; a route, `authz` module or repository never calls
+  `commit()`, `rollback()` or `begin()` on a session. `/ready` is the worked example
   (`apps/api/src/roadmaps_api/routes/probes.py`, with its service and repository under
   `services/` and `repositories/` beside it), its service given to the route as a
   dependency.

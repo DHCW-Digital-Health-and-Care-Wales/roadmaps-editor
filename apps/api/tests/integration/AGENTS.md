@@ -14,10 +14,15 @@ harness's fixtures.
 - Connect as the application's login: take the `database_url` fixture. After each test
   that takes it, the worker's superuser connection empties every table but
   `alembic_version`, so the revision `/ready` reads stays.
-- Only the harness holds the superuser connection (`worker_admin`, `harness.admin()`).
+- Only the harness holds the superuser connection (`worker_admin`, `harness.admin()`,
+  `harness.admin_session()`).
   Use it to set up what a test needs and to read catalogs, never as the login under test.
-- Roles are shared by every worker on the cluster: a test that changes a role, a
-  membership or a role's grants does it on throwaway roles of its own
+- Set up the domain rows a test needs but does not itself exercise with
+  `apps/api/tools/seed/factories.py` over `harness.admin_session()`, not raw SQL,
+  adding an ORM row only where no factory fits. Write access rows inside that module's
+  `system_access_change_set`.
+- PostgreSQL roles are shared by every worker on the cluster: a test that changes a
+  role, a role membership or a role's grants does it on throwaway roles of its own
   (`harness.unique_name`) and drops them, as `test_bootstrap.py` and `test_readiness.py`
   do. A test that needs a database the template's state does not fit makes its own with
   `harness.create_database` and drops it. A test that bootstraps the shared roles

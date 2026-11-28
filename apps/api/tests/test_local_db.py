@@ -1,10 +1,10 @@
-"""Unit tests for shared local-only superuser URL and environment guards (`tools._local_db`)."""
+"""Unit tests for shared local-only superuser URL and environment guards (`tools.local_db`)."""
 
 import pytest
 
 from roadmaps_api.settings import CLOUD_RUN_MARKERS, ENV, SettingsError
 from tests.support import Lines
-from tools._local_db import ADMIN_DATABASE_URL, loopback_host, validated_local_admin_url
+from tools.local_db import ADMIN_DATABASE_URL, loopback_host, validated_local_admin_url
 
 SECRET = "SECRET-PASSWORD-91e2"  # noqa: S105 - planted, to prove no secret leaks
 LOCAL_URL = f"postgresql+psycopg://roadmaps:{SECRET}@127.0.0.1:5432/roadmaps"

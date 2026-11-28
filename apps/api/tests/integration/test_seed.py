@@ -42,7 +42,7 @@ from roadmaps_api.models import (
 from roadmaps_api.settings import ENV, SettingsError
 from tests import harness
 from tests.support import Lines
-from tools._local_db import ADMIN_DATABASE_URL, truncate_public_tables
+from tools.local_db import ADMIN_DATABASE_URL, truncate_public_tables
 from tools.seed import (
     CWM_AUR_SLUG,
     DEFAULT_SEED,

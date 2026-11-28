@@ -19,7 +19,7 @@ from EPC-022 when the backend work moved here. See `docs/AGENTS.md`.
   asserts no planted value reaches the log runs under test's or production's rules
   (`apps/api/tests/conftest.py`'s `lines` fixture, or production's settings).
 - **The first migration that inserts seed/lookup rows must teach both teardown sites
-  (`apps/api/tests/harness.py:empty_tables` and `apps/api/tools/_local_db.py:truncate_public_tables`)
+  (`apps/api/tests/harness.py:empty_tables` and `apps/api/tools/local_db.py:truncate_public_tables`)
   to put them back** after each `TRUNCATE … CASCADE`, with a test (carried from EPC-022
   _The API's conventions_ / STY-091 D15; extended for `STY-093`).
 - **Public-repo security hygiene (`STY-102` D7, D9, D12)**: never publish unfixed
